@@ -4,9 +4,12 @@ module Root
   class Folder
 
 
-    def self.process( folder_name )
+    def self.process( folder )
 
-#      p "Foldername: " + folder_name.to_s
+      foldername = folder.to_s
+      movie_name = ""
+
+      p "Processing Folder: " + foldername
 
     end
 

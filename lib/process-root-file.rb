@@ -1,7 +1,10 @@
 
 ### Process a where a single file has been downloaded
 
-require 'facets/string/titlecase'
+
+
+### My Files
+require 'title'
 
 module Root
   class File
@@ -12,30 +15,17 @@ module Root
       filename = file.to_s
       movie_name = ""
 
+      file_type = Util::Filename.get_file_type(filename)
+
       p "Processing File: " + filename
 
+      result = Util::Filename.process( filename )
 
-      year = find_year( filename )
-
-      if (! year.nil?)
-        movie_name = filename.partition(year).first
-      end
-
-      movie_name =  movie_name.gsub("."," ").titlecase.gsub(" To "," to ").gsub(" At "," at ").gsub(" Of "," of ").gsub(" On "," on ").gsub(" By "," by ").gsub(" A "," a ").gsub(" An "," an ").gsub(" The "," the ").gsub(" And "," and ").gsub(" But "," but ").gsub(" For "," for ").gsub(" Or "," or ")
-
-      if (! year.nil?)
-        p "---> " + movie_name + "("+ year +")"
-      else
-        p "---> " + movie_name
-
-      end
-    end
-
-    def self.find_year( filename )
-
-      return filename[/\b(?:19|20)\d{2}\b/]
+      p "----> " + result + "." + file_type.to_s
 
     end
+
+
 
 
 
