@@ -6,7 +6,7 @@ module Root
 
     def self.process( folder_name )
 
-      p "Foldername: " + folder_name.to_s
+#      p "Foldername: " + folder_name.to_s
 
     end
 
