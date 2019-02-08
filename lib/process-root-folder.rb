@@ -17,7 +17,7 @@ module Root
       p "Processing Folder: " + foldername.to_s
 
 # What should this folder be renamed to ?
-      new_folder_name = Util::Filename.process( foldername )
+      new_folder_name = Util::Filename.process( folder )
 
 # Loop through this folder's contents
       folder.children.each do |item|
@@ -66,9 +66,11 @@ module Sub
 
     def self.just_delete(file)
 
-      file_types_we_want = ["mkv", "avi", "mov", "mp4", "wmf", "m4p", "m4v", "mpv", "srt"]
+      filename = file.basename.to_s
 
-      if ! file_types_we_want.include? file.extname
+      file_types_we_want = [".mkv", ".avi", ".mov", ".mp4", ".wmf", ".m4p", ".m4v", ".mpv", ".srt"]
+
+      if (! file_types_we_want.include? file.extname) && ( ! filename.start_with? ".")
         p "OK to delete?  " + filename
         input = gets
         if input.start_with? "y"

@@ -12,14 +12,14 @@ module Root
 
     def self.process( file )
 
-      filename = file.to_s
+      filename = file.basename.to_s
       movie_name = ""
 
-      file_type = Util::Filename.get_file_type(filename)
+      file_type = file.extname
 
       p "Processing File: " + filename
 
-      result = Util::Filename.process( filename )
+      result = Util::Filename.process( file )
 
       p "----> " + result + "." + file_type.to_s
 
