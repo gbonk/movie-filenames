@@ -24,8 +24,14 @@ raise "Need to specify a file to process" unless directory
 
 root_dir = Pathname.new( directory ).realpath
 
+directories_to_skip = [".", "..", "#recycle", "P R O N", "TODO",]
+
 root_dir.children.each do |item|
-  next if item == '.' or item == '..'
+
+   if item.basename.to_s.start_with? *directories_to_skip
+     puts "Skipping: " + item.to_s
+     next
+   end
 
   if File.directory?(item)
     Root::Folder.process(item)

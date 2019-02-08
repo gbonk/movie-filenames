@@ -3,7 +3,8 @@
 
 
 require 'facets/string/titlecase'
-
+require 'rest-client'
+require 'json'
 
 module Util
   class Filename
@@ -11,27 +12,32 @@ module Util
 
     def self.process( filename )
 
-      movie_name = ""
+      title = filename.basename.to_s
 
       year = find_year( filename )
 
       if (! year.nil?)
-        movie_name = filename.partition(year).first
+        title = title.partition(year).first
       end
 
-      movie_name =  movie_name.gsub("."," ").titlecase.gsub(" To "," to ").gsub("(","").gsub(" At "," at ").gsub(" Of "," of ").gsub(" On "," on ").gsub(" By "," by ").gsub(" A "," a ").gsub(" An "," an ").gsub(" The "," the ").gsub(" And "," and ").gsub(" But "," but ").gsub(" For "," for ").gsub(" Or "," or ")
+#      movie_name =  movie_name.gsub("."," ").titlecase.gsub(" To "," to ").gsub("(","").gsub(" At "," at ").gsub(" Of "," of ").gsub(" On "," on ").gsub(" By "," by ").gsub(" A "," a ").gsub(" An "," an ").gsub(" The "," the ").gsub(" And "," and ").gsub(" But "," but ").gsub(" For "," for ").gsub(" Or "," or ")
+
+
+      call_omdb( title, year )
+
+      exit(0);
 
       if (! year.nil?)
-        return movie_name + "("+ year +")"
+        return title + "("+ year +")"
       else
-        return movie_name
+        return title
 
       end
     end
 
     def self.find_year( filename )
 
-      return filename[/\b(?:19|20)\d{2}\b/]
+      return filename.to_s[/\b(?:19|20)\d{2}\b/]
 
     end
 
@@ -41,6 +47,27 @@ module Util
 
     end
 
+    def self.call_omdb( title, year )
+
+  #    http://www.omdbapi.com/?t=Phantom.of.the.Opera.&y=1943&apikey=def997d7
+
+
+      response = RestClient.get 'http://www.omdbapi.com/', {:params => { :t => title, :y => year, :apikey => 'def997d7'}}
+
+      body = JSON.parse(response.body)
+
+      puts body["Title"]
+
+    end
+
+
+
+
+    def self.is_final_format( filename )
+
+        return filename[/\A[a-zA-z ]*\((?:19|20)\d{2}\)/]
+
+    end
 
 
   end

@@ -23,6 +23,12 @@ module Root
 
       p "----> " + result + "." + file_type.to_s
 
+      #Check first if there is a directory
+
+      # Create a direcoty for it
+
+      # Move the file into the dir
+
     end
 
 

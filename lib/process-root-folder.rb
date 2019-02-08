@@ -11,10 +11,10 @@ module Root
 
     def self.process( folder )
 
-      foldername = folder.to_s
+      foldername = folder.basename
       movie_name = ""
 
-      p "Processing Folder: " + foldername
+      p "Processing Folder: " + foldername.to_s
 
 # What should this folder be renamed to ?
       new_folder_name = Util::Filename.process( foldername )
@@ -48,16 +48,37 @@ module Sub
 
     def self.process( file )
 
-      filename = file.to_s
+      filename = file.basename.to_s
 
-      if [".txt", ".nfo"].include? file.extname
-        p "Deleting: " + filename
+      # Some files we never care about, just delete them
+      if just_delete(file)
+         return
+      end
+
+      if false
       elsif file.to_s =~ /sample:/i
         p "Deleting: " + filename
       else
         p "Ignoring: " + filename
       end
 
+    end
+
+    def self.just_delete(file)
+
+      file_types_we_want = ["mkv", "avi", "mov", "mp4", "wmf", "m4p", "m4v", "mpv", "srt"]
+
+      if ! file_types_we_want.include? file.extname
+        p "OK to delete?  " + filename
+        input = gets
+        if input.start_with? "y"
+          file.delete
+          return true
+        else
+          puts "....skipping"
+          return false
+        end
+      end
     end
 
   end
@@ -71,10 +92,12 @@ module Sub
 
     def self.process( folder )
 
-      foldername = folder.to_s
+      is_subtitle_folder
+
+      foldername = folder.basename.to_s
       movie_name = ""
 
-      p "Processing Folder: " + foldername
+      p "Processing Sub-Folder: " + foldername
 
     end
 
